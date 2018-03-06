@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView from 'react-native-maps';
 
 export default class DisplayAnImage extends Component {
@@ -8,12 +8,21 @@ export default class DisplayAnImage extends Component {
       <View style={styles.container}>
         <MapView style={styles.map}
           region={{
-            latitude:37.7749,
-            longitude:-122.4194,
+            latitude:34.040203,
+            longitude:-118.284030,
             latitudeDelta: 0.0922,
             longitudeDelta:0.1
           }}
         >
+          <MapView.Circle
+            center={{
+              latitude:34.040203,
+              longitude:-118.284030
+            }}
+            radius={150}
+            fillColor={"rgba(255,0,0,0.5)"}
+            strokeColor={"rgba(255,0,0,0.5)"}
+          />
         </MapView>
       </View>
     );
