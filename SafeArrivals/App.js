@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView from 'react-native-maps';
+import { AppRegistry, TextInput } from 'react-native';
 
 export default class DisplayAnImage extends Component {
   render() {
     return (
+
       <View style={styles.container}>
+        
         <MapView style={styles.map}
           region={{
             latitude:34.040203,
@@ -24,6 +27,12 @@ export default class DisplayAnImage extends Component {
             strokeColor={"rgba(255,0,0,0.5)"}
           />
         </MapView>
+        <View>
+          <TextInput
+            style={{top: -650}}
+            value={"Destination"}
+          />
+        </View>
       </View>
     );
   }
@@ -44,5 +53,10 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0
+  },
+  tInput: {
+    height: 40, 
+    borderColor: 'gray', 
+    borderWidth: 1,
   }
 });
