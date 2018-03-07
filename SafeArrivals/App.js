@@ -4,6 +4,10 @@ import MapView from 'react-native-maps';
 import { AppRegistry, TextInput } from 'react-native';
 
 export default class DisplayAnImage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {text: ''};
+  }
   render() {
     return (
 
@@ -29,8 +33,9 @@ export default class DisplayAnImage extends Component {
         </MapView>
         <View>
           <TextInput
-            style={{top: -650}}
-            value={"Destination"}
+            style={styles.text}
+            placeholder="Type here to translate!"
+            onChangeText={(text) => this.setState({text})}
           />
         </View>
       </View>
@@ -54,9 +59,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0
   },
-  tInput: {
-    height: 40, 
-    borderColor: 'gray', 
-    borderWidth: 1,
-  }
+  text: { 
+    marginVertical: 250, 
+    backgroundColor:'rgba(128,128,128,0.7)', 
+    width: 300
+  },
 });
