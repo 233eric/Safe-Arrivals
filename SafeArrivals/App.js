@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView from 'react-native-maps';
-import { AppRegistry, TextInput } from 'react-native';
+import { AppRegistry, TextInput, Button, Alert } from 'react-native';
 
 export default class DisplayAnImage extends Component {
   constructor(props) {
     super(props);
     this.state = {text: ''};
+  }
+
+  _onPressButton() {
+    Alert.alert('This is backends job')
   }
   render() {
     return (
@@ -31,12 +35,26 @@ export default class DisplayAnImage extends Component {
             strokeColor={"rgba(255,0,0,0.5)"}
           />
         </MapView>
-        <View>
-          <TextInput
-            style={styles.text}
-            placeholder="Type here to translate!"
-            onChangeText={(text) => this.setState({text})}
-          />
+        <View style = {{position: 'absolute', top: 50, backgroundColor: 'rgba(0,0,0,0.5)'}}>
+          <View style = {{flexDirection: 'row'}}>
+            <View>
+              <TextInput
+                style={styles.text}
+                placeholder="Where you AT!!!"
+                onChangeText={(text) => this.setState({text})}
+              />
+              <TextInput
+                style={styles.text}
+                placeholder="Where you GOIN!!!"
+                onChangeText={(text) => this.setState({text})}
+              />
+            </View>
+            <Button
+              onPress={this._onPressButton}
+              title="GOGO"
+              color="#841584"
+            />
+          </View>
         </View>
       </View>
     );
@@ -60,8 +78,7 @@ const styles = StyleSheet.create({
     right: 0
   },
   text: { 
-    marginVertical: 250, 
-    backgroundColor:'rgba(128,128,128,0.7)', 
+    backgroundColor:'rgba(0,0,0,0.4)', 
     width: 300
   },
 });
