@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView from 'react-native-maps';
-import { AppRegistry, TextInput, Button, Alert } from 'react-native';
+import { Animated, AppRegistry, TextInput, Button, Alert} from 'react-native';
 
 export default class Map extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ export default class Map extends Component {
     return (
 
       <View style={styles.container}>
-
+        
         <MapView style={styles.map}
           region={{
             latitude:34.040203,
@@ -56,6 +56,9 @@ export default class Map extends Component {
             />
           </View>
         </View>
+        <View style = {styles.menu}>
+          <Text style = {{alignSelf: 'center'}}>Drag up or Down</Text>
+        </View>
       </View>
     );
   }
@@ -68,7 +71,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    flexDirection: 'column',
+    flex: 1
   },
   map: {
     position: 'absolute',
@@ -77,14 +81,18 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0
   },
-  text: {
-    backgroundColor:'rgba(0,0,0,0.4)',
+  text: { 
+    backgroundColor:'rgba(0,0,0,0.4)', 
     width: 300
   },
   nav: {
-    position: 'absolute',
-    top: 0,
-    padding: 30,
-    backgroundColor: 'rgb(0,0,0)',
+    position: 'absolute', 
+    top: 0, 
+    padding: 30, 
+    backgroundColor: 'rgba(0,0,0,1)',    
+  },
+  menu: {
+    height: 50, 
+    backgroundColor: 'rgba(0,0,0,0.3)', 
   }
 });
