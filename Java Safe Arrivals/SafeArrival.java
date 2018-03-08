@@ -33,6 +33,9 @@ public class SafeArrival {
 				in.close();
 		con.disconnect();
 		System.out.println(content);
+		
+		String jsonString = "{\"stat\": { \"sdr\": \"aa:bb:cc:dd:ee:ff\", \"rcv\": \"aa:bb:cc:dd:ee:ff\", \"time\": \"UTC in millis\", \"type\": 1, \"subt\": 1, \"argv\": [{\"type\": 1, \"val\":\"stackoverflow\"}]}}";
+        
 	}
 
 }
