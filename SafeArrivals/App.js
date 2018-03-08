@@ -1,90 +1,101 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import MapView from 'react-native-maps';
-import { AppRegistry, TextInput, Button, Alert } from 'react-native';
+import React from 'react';
+import {
+  ActivityIndicator,
+  AsyncStorage,
+  Button,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { StackNavigator, SwitchNavigator } from 'react-navigation'; // Version can be specified in package.json
+import Map from "./Map.js"
 
-export default class DisplayAnImage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {text: ''};
-  }
+class SignInScreen extends React.Component {
+  static navigationOptions = {
+    title: 'SafeArrivals',
+  };
 
-  _onPressButton() {
-    Alert.alert('This is backends job')
-  }
   render() {
     return (
-
       <View style={styles.container}>
-        
-        <MapView style={styles.map}
-          region={{
-            latitude:34.040203,
-            longitude:-118.284030,
-            latitudeDelta: 0.0922,
-            longitudeDelta:0.1
-          }}
-        >
-          <MapView.Circle
-            center={{
-              latitude:34.040203,
-              longitude:-118.284030
-            }}
-            radius={150}
-            fillColor={"rgba(255,0,0,0.5)"}
-            strokeColor={"rgba(255,0,0,0.5)"}
-          />
-        </MapView>
-        <View style = {styles.nav}>
-          <View style = {{flexDirection: 'row'}}>
-            <View>
-              <TextInput
-                style={styles.text}
-                placeholder="Where you AT!!!"
-                onChangeText={(text) => this.setState({text})}
-              />
-              <TextInput
-                style={styles.text}
-                placeholder="Where you TRYIN TO ARRIVE SAFELY!!!"
-                onChangeText={(text) => this.setState({text})}
-              />
-            </View>
-            <Button
-              onPress={this._onPressButton}
-              title="GOGO"
-              color="#841584"
-            />
-          </View>
-        </View>
+        <Button title="Welcome to SafeArrivals" onPress={this._signInAsync} />
+      </View>
+    );
+  }
+
+  _signInAsync = async () => {
+    await AsyncStorage.setItem('userToken', 'abc');
+    this.props.navigation.navigate('App');
+  };
+}
+
+class HomeScreen extends React.Component {
+  static navigationOptions = {
+    title: 'SafeArrivals',
+  };
+
+  render() {
+    return (
+      <Map />
+    );
+  }
+
+  _showMoreApp = () => {
+    this.props.navigation.navigate('Other');
+  };
+
+  _signOutAsync = async () => {
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('Auth');
+  };
+}
+
+
+class AuthLoadingScreen extends React.Component {
+  constructor() {
+    super();
+    this._bootstrapAsync();
+  }
+
+  // Fetch the token from storage then navigate to our appropriate place
+  _bootstrapAsync = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+
+    // This will switch to the App screen or Auth screen and this loading
+    // screen will be unmounted and thrown away.
+    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+  };
+
+  // Render any loading content that you like here
+  render() {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator />
+        <StatusBar barStyle="default" />
       </View>
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#000000"
   },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0
-  },
-  text: { 
-    backgroundColor:'rgba(0,0,0,0.4)', 
-    width: 300
-  },
-  nav: {
-    position: 'absolute', 
-    top: 0, 
-    padding: 30, 
-    backgroundColor: 'rgb(0,0,0)',    
-  }
 });
+
+const AppStack = StackNavigator({ Home: HomeScreen });
+const AuthStack = StackNavigator({ SignIn: SignInScreen });
+
+export default SwitchNavigator(
+  {
+    SignIn: SignInScreen,
+    App: AppStack,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'SignIn',
+  }
+);
