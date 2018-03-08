@@ -35,7 +35,7 @@ export default class DisplayAnImage extends Component {
             strokeColor={"rgba(255,0,0,0.5)"}
           />
         </MapView>
-        <View style = {{position: 'absolute', top: 50, backgroundColor: 'rgba(0,0,0,0.5)'}}>
+        <View style = {styles.nav}>
           <View style = {{flexDirection: 'row'}}>
             <View>
               <TextInput
@@ -45,7 +45,7 @@ export default class DisplayAnImage extends Component {
               />
               <TextInput
                 style={styles.text}
-                placeholder="Where you GOIN!!!"
+                placeholder="Where you TRYIN TO ARRIVE SAFELY!!!"
                 onChangeText={(text) => this.setState({text})}
               />
             </View>
@@ -81,4 +81,10 @@ const styles = StyleSheet.create({
     backgroundColor:'rgba(0,0,0,0.4)', 
     width: 300
   },
+  nav: {
+    position: 'absolute', 
+    top: 0, 
+    padding: 30, 
+    backgroundColor: 'rgb(0,0,0)',    
+  }
 });
