@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.*;
 import java.net.*;
+import org.json.*;
 
 public class SafeArrival {
 
@@ -33,9 +34,21 @@ public class SafeArrival {
 				in.close();
 		con.disconnect();
 		System.out.println(content);
+		String contentStr = "[" + content.toString() + "]";
 		
-		String jsonString = "{\"stat\": { \"sdr\": \"aa:bb:cc:dd:ee:ff\", \"rcv\": \"aa:bb:cc:dd:ee:ff\", \"time\": \"UTC in millis\", \"type\": 1, \"subt\": 1, \"argv\": [{\"type\": 1, \"val\":\"stackoverflow\"}]}}";
-        
+		//JSONObject jsonObject = new JSONObject(content);
+		
+		//System.out.println(jsonObject);
+		JSONArray jsonObj = new JSONArray(new JSONTokener (contentStr));
+		
+		System.out.println(jsonObj);
+		
+		
+//        JSONObject newJSON = jsonObject.getJSONObject("geocoded_waypoints");
+//        System.out.println(newJSON.toString());
+//        jsonObject = new JSONObject(newJSON.toString());
+//        System.out.println(jsonObject.getString("rcv"));
+//        System.out.println(jsonObject.getJSONArray("argv"));
 	}
 
 }
