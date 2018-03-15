@@ -12,7 +12,6 @@ def parseData(toRead: ".csv file to read", toWrite: ".txt file to write to"):
         for row in reader:
             i += 1
             if i == 400000:
-                z = csv.reader(reader, delimiter='\t')
 
                 newTxt = open(toWrite+".txt","w")
                 """
@@ -28,10 +27,16 @@ def parseData(toRead: ".csv file to read", toWrite: ".txt file to write to"):
                     pass
                 for element in collisionCount:
                     if collisionCount[element] > 50:
-                        risk = collisionCount[element]//50
-                        #breakTuple = 
-                        print(addressMap[element] + " | " + str(collisionCount[element])+" "+ str(risk))
-                        newTxt.write(addressMap[element] + " " + str(collisionCount[element]) +" "+ str(risk) + "\n")
+                        #risk = collisionCount[element]//50
+                        
+                        ## converts str: "(lat, long)" into an iterable list type
+                        latlong = addressMap[element][1:len(addressMap[element])-1].split(", ")
+                        
+                        print((latlong[0] + " " + latlong[1] + " " + str(collisionCount[element]) +"\n"))
+                        
+                        #print(addressMap[element] + " | " + str(collisionCount[element]))
+                        
+                        newTxt.write(str(latlong[0]) + " " + str(latlong[1]) + " " + str(collisionCount[element]) +"\n")
                 newTxt.close()
                 return
 
@@ -56,9 +61,7 @@ main()
 
 """
 Format:
-
 [15] = "Address"
 [16] = "Cross Street"
 [17] = "(float, float)"
-
 """
