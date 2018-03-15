@@ -1,3 +1,7 @@
+"""
+> change lat long first instance to average lat long
+"""
+
 import csv
 import operator
 
