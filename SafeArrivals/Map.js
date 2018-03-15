@@ -7,11 +7,11 @@ import { Animated, AppRegistry, TextInput, Button, Alert, TouchableHighlight, To
 class FadeInView extends React.Component {
   state = {
     fadeAnim: new Animated.Value(20),
-    expanded: false,
+    expanded: true,
   }
   toggle(){
-      let initialValue    = this.state.expanded? 20 : 600,
-          finalValue      = this.state.expanded? 600 : 20;
+      let initialValue    = this.state.expanded? 20 : 500,
+          finalValue      = this.state.expanded? 500 : 20;
 
       this.setState({
           expanded : !this.state.expanded
@@ -32,6 +32,7 @@ class FadeInView extends React.Component {
   
   render() {
     let { fadeAnim } = this.state;
+    
     return (
       <Animated.View                 // Special animatable View
         style={{
@@ -56,9 +57,12 @@ export default class Map extends Component {
     super(props);
     this.state = {text: ''};
   }
+
+
   _onPressButton2() {
     Alert.alert("HA")
   }
+
   render() {
     return (
 
@@ -72,34 +76,25 @@ export default class Map extends Component {
             longitudeDelta:0.1
           }}
         >
-          <MapView.Circle
-            center={{
-              latitude:34.040203,
-              longitude:-118.284030
-            }}
-            radius={150}
-            fillColor={"rgba(255,0,0,0.5)"}
-            strokeColor={"rgba(255,0,0,0.5)"}
-          />
         </MapView>
         <View style = {styles.nav}>
           <View style = {{flexDirection: 'row'}}>
             <View>
               <TextInput
                 style={styles.text}
-                placeholder="Where you AT!!!"
+                placeholder="Location"
                 onChangeText={(text) => this.setState({text})}
               />
               <TextInput
                 style={styles.text}
-                placeholder="Where you TRYIN TO ARRIVE SAFELY!!!"
+                placeholder="Destination"
                 onChangeText={(text) => this.setState({text})}
               />
             </View>
             <Button 
               style = {{flex: 0, width: 20}}
               onPress={this._onPressButton2}
-              title="GOGO"
+              title="Go!"
               color="#841584"
             />
           </View>
@@ -132,7 +127,11 @@ const styles = StyleSheet.create({
   },
   text: { 
     backgroundColor:'rgba(0,0,0,0.4)', 
-    width: 300
+    width: 300,
+    borderColor: 'grey',
+    borderWidth: 1,
+    borderRadius: 5,
+    color: 'white',
   },
   nav: {
     position: 'absolute', 
@@ -151,5 +150,11 @@ const styles = StyleSheet.create({
     backgroundColor:'black', 
     alignItems: 'center', 
     height: 1000
+  },
+  marker: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "rgba(130,4,150, 0.9)",
   },
 });
