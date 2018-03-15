@@ -1,9 +1,3 @@
-package sort;
-
-/**
- * @author Victor
- * @version Mars.2 Release (4.5.2)
- */
 public class Merge {
 	
 	private static Comparable[] aux;
@@ -49,7 +43,7 @@ public class Merge {
 	 * @param x - the input array containing jobs that need to be sorted.
 	 * @param i - the index of one of the element to compare to
 	 * @param j - the index of one of the element use as a comparator
-	 * @return true if Job v's execution time is shorter than Job w, else false
+	 * @return true if Comparable v's execution time is shorter than Comparable w, else false
 	 */
 	private static boolean less(Comparable v, Comparable w){
 		return v.compareTo(w) < 0;
