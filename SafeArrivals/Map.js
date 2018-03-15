@@ -7,7 +7,7 @@ import { Animated, AppRegistry, TextInput, Button, Alert, TouchableHighlight, To
 class FadeInView extends React.Component {
   state = {
     fadeAnim: new Animated.Value(20),
-    expanded: false,
+    expanded: true,
   }
   toggle(){
       let initialValue    = this.state.expanded? 20 : 600,
