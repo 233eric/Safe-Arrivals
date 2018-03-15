@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView from 'react-native-maps';
-import { Animated, AppRegistry, TextInput, Button, Alert} from 'react-native';
+import { Animated, AppRegistry, TextInput, Button, Alert, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,} from 'react-native';
+
+
 class FadeInView extends React.Component {
   state = {
     fadeAnim: new Animated.Value(20),
@@ -37,7 +39,7 @@ class FadeInView extends React.Component {
           height: fadeAnim,        
         }}
       >
-        <View style = {{backgroundColor:'black', alignItems: 'center', height: 1000}}>
+        <View style = {styles.menu}>
             <TouchableHighlight onPress={this.toggle.bind(this)} underlayColor="white">
               <View style={styles.button}>
                 <Text style={styles.buttonText}>DIRECTIONS</Text>
@@ -54,9 +56,8 @@ export default class Map extends Component {
     super(props);
     this.state = {text: ''};
   }
-
-  _onPressButton() {
-    Alert.alert('This is backends job')
+  _onPressButton2() {
+    Alert.alert("HA")
   }
   render() {
     return (
@@ -95,8 +96,9 @@ export default class Map extends Component {
                 onChangeText={(text) => this.setState({text})}
               />
             </View>
-            <Button
-              onPress={this._onPressButton}
+            <Button 
+              style = {{flex: 0, width: 20}}
+              onPress={this._onPressButton2}
               title="GOGO"
               color="#841584"
             />
@@ -138,8 +140,16 @@ const styles = StyleSheet.create({
     padding: 30, 
     backgroundColor: 'rgba(0,0,0,1)',    
   },
+  button: {
+    marginBottom: 30,
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    width: 100
+    
+  },
   menu: {
-    height: 50, 
-    backgroundColor: 'rgba(0,0,0,0.3)', 
-  }
+    backgroundColor:'black', 
+    alignItems: 'center', 
+    height: 1000
+  },
 });
