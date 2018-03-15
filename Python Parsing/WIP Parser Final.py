@@ -1,7 +1,3 @@
-"""
-> change lat long first instance to average lat long
-"""
-
 import csv
 import operator
 
@@ -18,11 +14,7 @@ def parseData(toRead: ".csv file to read", toWrite: ".txt file to write to"):
             if i == 400000:
 
                 newTxt = open(toWrite+".txt","w")
-                """
-                for item in collisionCount:
-                    if collisionCount[item] > 1:
-                        print(item +": "+ str(collisionCount[item]))
-                """
+                
                 print(max(collisionCount.items(), key=operator.itemgetter(1))[0])
                 print(max(collisionCount.items(), key=operator.itemgetter(1))[1])
                 try:
@@ -31,31 +23,17 @@ def parseData(toRead: ".csv file to read", toWrite: ".txt file to write to"):
                     pass
                 for element in collisionCount:
                     if collisionCount[element] > 50:
-                        #risk = collisionCount[element]//50
+
                         newFormat = rmWS(element)
-                        #newFormat2 = '0000'
-            
-                        """
-                        try:
-                            temp = element.strip()
-                            print(temp)
-                        except:
-                            name = element
-                            print(name+"EXCEPTION")
-                        """
-                        print(newFormat+"NEWFORMAT")
-                        print(type(newFormat))
+
                         ## converts str: "(lat, long)" into an iterable list type
                         latlong = addressMap[element][1:len(addressMap[element])-1].split(", ")
                         willWrite = str(latlong[0] + " " + latlong[1] + " " + str(collisionCount[element]) +" "+ newFormat +"\n")
                         newTxt.write(willWrite)
                         print(willWrite)
                         
-                        #print(addressMap[element] + " | " + str(collisionCount[element]))
-                        
-                        
                 newTxt.close()
-                return
+                reparse(toWrite+".txt", 'data.txt')
 
             try:
                 #print(row[15].split()[0]+"\n"+ row[16].split()[0] +"\n"+ row[17]+"\n""\n")
@@ -84,41 +62,31 @@ def rmWS(s):
         elif i+1 == len(s)-1 and s[len(s)-1] != " ":
             tmp.append(s[i])
     return "".join(tmp)
-"""            
-    if len(tmp) >= 3:
-        newtmp = "".join(tmp).split()
-        sep = separateSt(newtmp[1])
-        #print("SEP = " + sep[0] + " " + sep[1])
-        tmp2 = []
-        for i in range(len(newtmp)):
-            if i != 1:
-                tmp2.append(newtmp[i]+" ")
-            if i == 1:
-                tmp2.append(sep[0]+" ")
-                tmp2.append(sep[1]+" ")
-        #print(tmp2)
-        return "".join(tmp2)
-        #print(tmp)"""
-    
-    #return "".join(tmp)
-""" try:
-        tmp2 = "".join(tmp).split(" ")
-        tmp3 = [tmp[0]," ",tmp2[1][0:2]," ",tmp2[1][2:len(tmp2[1][2])-1]," ",tmp[2]]
-    except:
-        print(tmp,'EXCEPTION')"""
-    
-
 
 def separateSt(s):
     
     return[s[0:2], s[2:len(s)]]
-    
+
+def reparse(toRead, toWrite):
+    reader = open(toRead, 'r')
+    writer = open(toWrite, 'w')
+    contents = reader.readlines()
+    for row in contents:
+        tmp = []
+        splt = row.split()
+        for i in range(len(splt)):
+            if i != len(splt)-2:
+                tmp.append(splt[i])
+                tmp.append(" ")
+            else:
+                tmp.append(splt[len(splt)-2][0:2])
+                tmp.append(" ")
+                tmp.append(splt[len(splt)-2][2:len(splt[len(splt)-2])])
+                tmp.append(" ")
+        tmp = "".join(tmp)
+        writer.write(tmp+"\n")
+        print(tmp)
+    writer.close()
+    reader.close()
+   
 main()
-
-"""
-Format:
-[15] = "Address"
-[16] = "Cross Street"
-[17] = "(float, float)"
-
-"""
