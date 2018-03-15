@@ -34,17 +34,18 @@ public class SafeArrivalSort {
 			 for (int i = 0; i < 4; i++) {
 				 splitDub[i] = Double.parseDouble(splitString[i]);
 			 }
-			 arr[count] = splitDub;
+			 arr[count] = new Intersection(splitDub[0],splitDub[1],(int)splitDub[2],(int)splitDub[3])
 		 }
 	}
 	
 	public static void main(String[] args) throws IOException {
-		String victorismvp = "C:\\Users\\Matty\\Desktop\\School Stuff\\2XB3\\Safe-Arrivals\\Python Parsing\\parsedCollisions.txt";
-		int numLines = countLines(victorismvp);
-		
+		String input = "parsedCollisions.txt";
+		int numLines = countLines(input);
 		System.out.println(numLines);
-		double safeArray[][] = new double[numLines][4];
-		organizeText(safeArray, victorismvp);
+		Intersection safeArray[] = new Intersection[numLines];
+		organizeText(safeArray, input);
+		
+		System.out.println(safeArray[5]);
 		
 
 	}
