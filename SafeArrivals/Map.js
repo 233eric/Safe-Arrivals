@@ -2,7 +2,53 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView from 'react-native-maps';
 import { Animated, AppRegistry, TextInput, Button, Alert} from 'react-native';
+class FadeInView extends React.Component {
+  state = {
+    fadeAnim: new Animated.Value(20),
+    expanded: false,
+  }
+  toggle(){
+      let initialValue    = this.state.expanded? 20 : 600,
+          finalValue      = this.state.expanded? 600 : 20;
 
+      this.setState({
+          expanded : !this.state.expanded
+      });
+
+      this.state.fadeAnim.setValue(initialValue);
+      Animated.spring(
+          this.state.fadeAnim,
+          {
+              toValue: finalValue
+          }
+      ).start();
+  }
+  
+
+  
+  
+  
+  render() {
+    let { fadeAnim } = this.state;
+    return (
+      <Animated.View                 // Special animatable View
+        style={{
+          ...this.props.style,
+          height: fadeAnim,        
+        }}
+      >
+        <View style = {{backgroundColor:'black', alignItems: 'center', height: 1000}}>
+            <TouchableHighlight onPress={this.toggle.bind(this)} underlayColor="white">
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>DIRECTIONS</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+        {this.props.children}
+      </Animated.View>
+    );
+  }
+}
 export default class Map extends Component {
   constructor(props) {
     super(props);
@@ -56,9 +102,10 @@ export default class Map extends Component {
             />
           </View>
         </View>
-        <View style = {styles.menu}>
-          <Text style = {{alignSelf: 'center'}}>Drag up or Down</Text>
-        </View>
+        <FadeInView 
+          ref={component => this._mainMenu = component}
+        >
+        </FadeInView>
       </View>
     );
   }
