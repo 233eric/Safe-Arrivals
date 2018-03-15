@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class SafeArrivalSort {
 
@@ -23,18 +24,19 @@ public class SafeArrivalSort {
 	    }
 	}
 	
-	public static void organizeText(double[][] arr, String filename) throws IOException{
+	public static void organizeText(Intersection[] arr, String filename) throws IOException{
 		 File file = new File(filename);
 		 BufferedReader br = new BufferedReader(new FileReader(file));
 		 String st;
 		 int count = 0;
-		 double [] splitDub = new double[4];
+		 double [] splitDub = new double[3];
 		 while ((st = br.readLine()) != null) {
 			 String[] splitString = st.split(" ");
-			 for (int i = 0; i < 4; i++) {
+			 for (int i = 0; i < 3; i++) {
 				 splitDub[i] = Double.parseDouble(splitString[i]);
 			 }
-			 arr[count] = new Intersection(splitDub[0],splitDub[1],(int)splitDub[2],(int)splitDub[3])
+			 arr[count] = new Intersection(splitDub[0],splitDub[1],(int)splitDub[2]);
+			 count++;
 		 }
 	}
 	
@@ -44,10 +46,14 @@ public class SafeArrivalSort {
 		System.out.println(numLines);
 		Intersection safeArray[] = new Intersection[numLines];
 		organizeText(safeArray, input);
+		Merge.sortMerge(safeArray, safeArray.length);
 		
-		System.out.println(safeArray[5]);
+		ArrayList<Intersection> output = safeArray[safeArray.length].intersectionInRadius(5, safeArray);
+		for (int i = 0; i < output.size(); i++)
+			System.out.println(output.get(i));
+		System.out.println(output.size());
 		
-
+		
 	}
 
 }
