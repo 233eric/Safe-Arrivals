@@ -1,15 +1,15 @@
-
+import java.util.*;
 public class Intersection implements Comparable<Intersection>{
 	private double lat;
 	private double lon;
-	private int risk;
 	private int frequency;
+	private int risk;
 	
-	public Intersection(double lat, double lon, int frequency, int risk) {
+	public Intersection(double lat, double lon, int frequency) {
 		this.lat = lat;
 		this.lon = lon;
-		this.risk = risk;
 		this.frequency = frequency;
+		this.risk = frequency/50;
 	}
 	public double lat() {
 		return lat;
@@ -25,13 +25,15 @@ public class Intersection implements Comparable<Intersection>{
 		return frequency;
 	}
 	
-	public double getDist(Intersection p1, Intersection p2) {
+	public double getDist(Intersection p) {
+		Intersection p1 = this;
+		Intersection p2 = p;
 		int R = 6371; // Radius of the earth in km
 		double dLat = deg2rad(p2.lat() - p1.lat());  // deg2rad below
-		double dLon = deg2rad(p2.lon()-p1.lon()); 
+		double dLon = deg2rad(p2.lon()- p1.lon()); 
 		double a = 
 		Math.sin(dLat/2) * Math.sin(dLat/2) +
-		Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+		Math.cos(deg2rad(p1.lat())) * Math.cos(deg2rad(p2.lat())) * 
 		Math.sin(dLon/2) * Math.sin(dLon/2); 
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 		double d = R * c; // Distance in km
@@ -43,11 +45,21 @@ public class Intersection implements Comparable<Intersection>{
 	}
 	
 	public String toString() {
-		return "(" + this.lat + "," + this.lon + ")" + this.frequency + " " + this.risk;
+		return "(" + this.lat + "," + this.lon + ") " + this.frequency + " " + this.risk;
 	}
 	
 	public int compareTo(Intersection p) {
-		return this.frequency.compareTo(p.frequency());
+		return ((Integer)this.frequency).compareTo(p.frequency());
 	}
+	
+	public ArrayList<Intersection> intersectionInRadius(int radius, Intersection [] data){
+		ArrayList<Intersection> output = new ArrayList<Intersection>();
+		for (int i =0; i < data.length; i++) {
+			if (this.getDist(data[i]) < radius)
+				output.add(data[i]);
+		}
+		return output;
+	}
+	
 
 }
