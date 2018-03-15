@@ -6,6 +6,11 @@ import org.json.*;
 public class SafeArrival {
 
 	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		String ori = br.readLine();
+//		String des = br.readLine();
+		
 		String theURL = "https://maps.googleapis.com/maps/api/directions/json?key=";
 		String apiKey = "AIzaSyCzcL1raU5fiQkZQO83GMx10rd3Vxhnj8c";
 		
@@ -19,6 +24,22 @@ public class SafeArrival {
 		System.out.println(theURL);
 		
 		URL url = new URL(theURL);
+		
+//		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//		con.setRequestMethod("GET");
+//		con.setConnectTimeout(5000);
+//		con.setReadTimeout(5000);
+//		int status = con.getResponseCode();
+//		BufferedReader in = new BufferedReader(
+//				new InputStreamReader(con.getInputStream()));
+//				String inputLine;
+//				StringBuffer content = new StringBuffer();
+//				while ((inputLine = in.readLine()) != null) {
+//				    content.append(inputLine);
+//				}
+//				in.close();
+//		con.disconnect();
+		
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		con.setConnectTimeout(5000);
@@ -27,28 +48,50 @@ public class SafeArrival {
 		BufferedReader in = new BufferedReader(
 				new InputStreamReader(con.getInputStream()));
 				String inputLine;
-				StringBuffer content = new StringBuffer();
+				String content = "";
 				while ((inputLine = in.readLine()) != null) {
-				    content.append(inputLine);
+				    content += inputLine + "\n";
 				}
 				in.close();
 		con.disconnect();
+		
 		System.out.println(content);
 		String contentStr = "[" + content.toString() + "]";
 		
-		//JSONObject jsonObject = new JSONObject(content);
+		JSONObject obj = new JSONObject(content);
 		
-		//System.out.println(jsonObject);
-		JSONArray jsonObj = new JSONArray(new JSONTokener (contentStr));
+		System.out.println(obj);
 		
-		System.out.println(jsonObj);
+//		System.out.println("");
+//		JSONArray jsonObj = new JSONArray(new JSONTokener (contentStr));
 		
+		System.out.println("");
 		
-//        JSONObject newJSON = jsonObject.getJSONObject("geocoded_waypoints");
-//        System.out.println(newJSON.toString());
-//        jsonObject = new JSONObject(newJSON.toString());
-//        System.out.println(jsonObject.getString("rcv"));
-//        System.out.println(jsonObject.getJSONArray("argv"));
+		System.out.println(obj.getJSONArray("routes"));
+		
+		JSONArray arr = obj.getJSONArray("routes");
+		System.out.println(arr.getJSONObject(0));
+		
+		obj = arr.getJSONObject(0);
+		System.out.println(obj.getJSONArray("legs"));
+		
+		arr = obj.getJSONArray("legs");
+		obj = arr.getJSONObject(0);
+		
+		arr = obj.getJSONArray("steps");
+		System.out.println(arr);
+		System.out.println("");
+		
+		for (int i = 0; i < arr.length(); i++) {
+			System.out.println((arr.getJSONObject(i)).getJSONObject("start_location"));
+			if (i == arr.length()-1)
+				System.out.println((arr.getJSONObject(i)).getJSONObject("end_location"));
+		}
+		
+//		obj = arr.getJSONObject(1);
+//		System.out.println(obj);
+		
+
 	}
 
 }
