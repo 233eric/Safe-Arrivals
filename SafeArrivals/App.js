@@ -22,18 +22,13 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <View style={{flex: 1, backgroundColor: "#00ffff"}}>
+        <View style={{flex: 1, backgroundColor: "#707070"}}>
           <Text style={styles.title}>SafeArrivals</Text>
-        </View>
-        <View style={{flex: 2, backgroundColor: "#00cdcd"}}>
           <Image
-          style={{width: 225, height: 225, alignSelf: 'center', marginTop: 10}}
+          style={{width: 300, height: 300, alignSelf: 'center', marginTop: 90}}
           source={require('./logo.png')}
           />
-
-        </View>
-        <View style={{flex: 3, backgroundColor: "#009a9a"}}>
-           <Button title="Click Here To Begin" onPress={this._signInAsync} />
+          <Button color="#000000" title="Click Here To Begin" onPress={this._signInAsync} />
         </View>
       </View>
     );
@@ -65,12 +60,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000"
   },
   title: {
+    fontFamily: 'Cochin',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 70,
-    marginTop: 20,
-    color: "white",
-    ...webWeights.semibold
+    marginTop: 25,
+    color: "black",
   }
 });
 

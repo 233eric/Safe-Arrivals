@@ -1,4 +1,3 @@
-import java.util.*;
 public class Intersection implements Comparable<Intersection>{
 	private double lat;
 	private double lon;
@@ -10,6 +9,12 @@ public class Intersection implements Comparable<Intersection>{
 		this.lon = lon;
 		this.frequency = frequency;
 		this.risk = frequency/50;
+	}
+	public Intersection(double lat, double lon) {
+		this.lat = lat;
+		this.lon = lon;
+		this.frequency = 0;
+		this.risk = 0;
 	}
 	public double lat() {
 		return lat;
@@ -51,15 +56,7 @@ public class Intersection implements Comparable<Intersection>{
 	public int compareTo(Intersection p) {
 		return ((Integer)this.frequency).compareTo(p.frequency());
 	}
-	
-	public ArrayList<Intersection> intersectionInRadius(int radius, Intersection [] data){
-		ArrayList<Intersection> output = new ArrayList<Intersection>();
-		for (int i =0; i < data.length; i++) {
-			if (this.getDist(data[i]) < radius)
-				output.add(data[i]);
-		}
-		return output;
-	}
+
 	
 
 }
