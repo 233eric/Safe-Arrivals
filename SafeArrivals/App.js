@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000"
   },
   title: {
-    fontFamily: 'Cochin',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 70,

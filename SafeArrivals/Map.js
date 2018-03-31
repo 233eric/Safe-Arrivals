@@ -25,19 +25,19 @@ class FadeInView extends React.Component {
           }
       ).start();
   }
+  
 
-
-
-
-
+  
+  
+  
   render() {
     let { fadeAnim } = this.state;
-
+    
     return (
       <Animated.View                 // Special animatable View
         style={{
           ...this.props.style,
-          height: fadeAnim,
+          height: fadeAnim,        
         }}
       >
         <View style = {styles.menu}>
@@ -56,16 +56,7 @@ export default class Map extends Component {
   state = {
     location: '',
     destination: '',
-    markers: [
-      {
-        coordinate: {
-          latitude: 34.0430,
-          longitude: -118.2673,
-        },
-        title: "Best Place",
-        description: "This is the best place in Portland",
-      },
-    ]
+    markers: []
   }
   componentWillMount() {
     this.index = 0;
@@ -78,29 +69,41 @@ export default class Map extends Component {
     this.setState({destination: text})
   }
   move = (loc, dest) => {
-    alert("start:"+ loc + dest)
+    alert(loc + dest)
+    this.state.markers.push (
+      {
+        uniqueId: 0,
+        latitude: 34.0430,
+        longitude: -118.2673
+      } 
+    );
+    this.forceUpdate();
   }
 
   render() {
+    var markers = this.state.markers || [];
     return (
 
       <View style={styles.container}>
-
+        
         <MapView style={styles.map}
-          region={{
+          initialRegion={{
             latitude:34.040203,
             longitude:-118.284030,
             latitudeDelta: 0.0922,
             longitudeDelta:0.1
           }}
         >
-          {this.state.markers.map((marker, index) => {
-            return (
-              <MapView.Marker key={index} coordinate={marker.coordinate}>
-                  <View style={styles.marker} />
-              </MapView.Marker>
-            );
-          })}
+          {markers.map(marker => (
+            <MapView.Marker
+              key={marker.uniqueId}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude
+              }}
+            >
+            </MapView.Marker>
+          ))}
         </MapView>
         <View style = {styles.nav}>
           <View style = {{flexDirection: 'row'}}>
@@ -118,7 +121,7 @@ export default class Map extends Component {
                 onChangeText={this.handleDestination}
               />
             </View>
-            <Button
+            <Button 
               style = {{flex: 0, width: 20}}
               onPress={() => this.move(this.state.location, this.state.destination)}
               title="Go!"
@@ -126,7 +129,7 @@ export default class Map extends Component {
             />
           </View>
         </View>
-        <FadeInView
+        <FadeInView 
           ref={component => this._mainMenu = component}
         >
         </FadeInView>
@@ -152,8 +155,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0
   },
-  text: {
-    backgroundColor:'rgba(0,0,0,0.4)',
+  text: { 
+    backgroundColor:'rgba(0,0,0,0.4)', 
     width: 300,
     borderColor: 'grey',
     borderWidth: 1,
@@ -162,29 +165,22 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   nav: {
-<<<<<<< HEAD
     position: 'absolute', 
     top: 0, 
     padding: 40, 
     backgroundColor: 'rgba(0,0,0,1)',   
     flex: 2, 
-=======
-    position: 'absolute',
-    top: 0,
-    padding: 30,
-    backgroundColor: 'rgba(0,0,0,1)',
->>>>>>> af7c2051d2de695cce936c3fd44b3c51f7b9a378
   },
   button: {
     marginBottom: 30,
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.7)',
     width: 100
-
+    
   },
   menu: {
-    backgroundColor:'black',
-    alignItems: 'center',
+    backgroundColor:'black', 
+    alignItems: 'center', 
     height: 1000
   },
   marker: {
@@ -193,7 +189,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: "rgba(130,4,150, 0.9)",
   },
-<<<<<<< HEAD
   markerWrap: {
     alignItems: "center",
     justifyContent: "center",
@@ -214,6 +209,3 @@ const styles = StyleSheet.create({
     borderColor: "rgba(130,4,150, 0.5)",
   },
 });
-=======
-});
->>>>>>> af7c2051d2de695cce936c3fd44b3c51f7b9a378
