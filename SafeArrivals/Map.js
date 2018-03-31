@@ -53,14 +53,32 @@ class FadeInView extends React.Component {
   }
 }
 export default class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {text: ''};
+  state = {
+    location: '',
+    destination: '',
+    markers: [
+      {
+        coordinate: {
+          latitude: 34.0430,
+          longitude: -118.2673,
+        },
+        title: "Best Place",
+        description: "This is the best place in Portland",
+      },
+    ]
   }
-
-
-  _onPressButton2() {
-    Alert.alert("HA")
+  componentWillMount() {
+    this.index = 0;
+    this.animation = new Animated.Value(0);
+  }
+  handleLocation = (text) => {
+    this.setState({location: text})
+  }
+  handleDestination = (text) => {
+    this.setState({destination: text})
+  }
+  move = (loc, dest) => {
+    alert("start:"+ loc + dest)
   }
 
   render() {
@@ -76,6 +94,13 @@ export default class Map extends Component {
             longitudeDelta:0.1
           }}
         >
+          {this.state.markers.map((marker, index) => {
+            return (
+              <MapView.Marker key={index} coordinate={marker.coordinate}>
+                  <View style={styles.marker} />
+              </MapView.Marker>
+            );
+          })}
         </MapView>
         <View style = {styles.nav}>
           <View style = {{flexDirection: 'row'}}>
@@ -83,17 +108,19 @@ export default class Map extends Component {
               <TextInput
                 style={styles.text}
                 placeholder="Location"
-                onChangeText={(text) => this.setState({text})}
+                returnKeyLabel = {"next"}
+                onChangeText={this.handleLocation}
               />
               <TextInput
                 style={styles.text}
                 placeholder="Destination"
-                onChangeText={(text) => this.setState({text})}
+                returnKeyLabel = {"next"}
+                onChangeText={this.handleDestination}
               />
             </View>
             <Button 
               style = {{flex: 0, width: 20}}
-              onPress={this._onPressButton2}
+              onPress={() => this.move(this.state.location, this.state.destination)}
               title="Go!"
               color="#841584"
             />
@@ -131,13 +158,15 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 5,
+    padding: 5,
     color: 'white',
   },
   nav: {
     position: 'absolute', 
     top: 0, 
-    padding: 30, 
-    backgroundColor: 'rgba(0,0,0,1)',    
+    padding: 40, 
+    backgroundColor: 'rgba(0,0,0,1)',   
+    flex: 2, 
   },
   button: {
     marginBottom: 30,
@@ -156,5 +185,24 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: "rgba(130,4,150, 0.9)",
+  },
+  markerWrap: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  marker: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "rgba(130,4,150, 0.9)",
+  },
+  ring: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "rgba(130,4,150, 0.3)",
+    position: "absolute",
+    borderWidth: 1,
+    borderColor: "rgba(130,4,150, 0.5)",
   },
 });
