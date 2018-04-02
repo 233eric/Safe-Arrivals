@@ -8,14 +8,14 @@ public class SafeArrival {
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		String ori = br.readLine();
-//		String des = br.readLine();
 		
 		String theURL = "https://maps.googleapis.com/maps/api/directions/json?key=";
 		String apiKey = "AIzaSyCzcL1raU5fiQkZQO83GMx10rd3Vxhnj8c";
 		
-		String origin = "288 Broadway Avenue Hamilton";
-		String dest = "McMaster University";
+		String origin = br.readLine();
+		String dest = br.readLine();
+//		String origin = "288 Broadway Avenue Hamilton";
+//		String dest = "McMaster University";
 		String mode = "driving";
 		
 		theURL += apiKey + "&origin=" + origin + "&destination=" + dest + "&mode=" + mode;
