@@ -28,7 +28,7 @@ class HomeScreen extends React.Component {
           source={require('./safe.png')}
           />
           <Image
-          style={{width: 300, height: 300, alignSelf: 'center', marginTop: 30}}
+          style={{width: 300, height: 300, alignSelf: 'center', marginTop: 30, marginBottom: 30}}
           source={require('./logo.png')}
           />
           <Button color="#000000" title="Click Here To Begin" onPress={this._signInAsync} />

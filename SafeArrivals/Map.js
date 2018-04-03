@@ -94,7 +94,7 @@ export default class Map extends Component {
           for (i = 0; i < d.length; i++){
             if(i == 0 || i == d.length-1){
               this.state.markers.push({
-                uniqueId : 0,
+                uniqueId : i,
                   latitude: parseFloat(d[i].lat),
                   longitude: parseFloat(d[i].lon)
               })
@@ -112,7 +112,7 @@ export default class Map extends Component {
          console.error(error);
       });
   
-  let theRisk = 3;
+  let theRisk = 55;
     fetch("https://safe-arrivals.appspot.com/collisions", {
          method: 'GET'
       })
@@ -121,14 +121,16 @@ export default class Map extends Component {
          let latlons2 = [];
          let d = responseJson;
           for (i = 0; i < d.length; i++){
-            if (d[i].risk == theRisk){
+            if (d[i].risk >= theRisk){
               latlons2.push({
-                uniqueId : 0,
+                uniqueId : i,
+                risk : d[i].risk,
                 latitude: parseFloat(d[i].lat),
                 longitude: parseFloat(d[i].lon),
               });
             }
           }
+          console.log(latlons2.length)
          this.setState({
             circles: latlons2
          })
@@ -203,6 +205,7 @@ export default class Map extends Component {
                 latitude: marker.latitude,
                 longitude: marker.longitude
               }}
+
               image={require('./uglyboi.png')}
             >
             </MapView.Marker>
