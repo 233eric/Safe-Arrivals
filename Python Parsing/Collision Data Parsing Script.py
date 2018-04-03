@@ -12,13 +12,9 @@ def parseData(toRead: ".csv file to read", toWrite: ".txt file to write to"):
         for row in reader:
             i += 1
             if i == 400000:
-
+                
                 newTxt = open(toWrite+".txt","w")
-                """
-                for item in collisionCount:
-                    if collisionCount[item] > 1:
-                        print(item +": "+ str(collisionCount[item]))
-                """
+                
                 print(max(collisionCount.items(), key=operator.itemgetter(1))[0])
                 print(max(collisionCount.items(), key=operator.itemgetter(1))[1])
                 try:
@@ -45,12 +41,12 @@ def parseData(toRead: ".csv file to read", toWrite: ".txt file to write to"):
                 
                 index = row[15] +","+ row[16]
                 if i == 100000: print(index)
-                
                 collisionCount[index] = collisionCount.get(index, 0) + 1
                 if index not in addressMap:
                     addressMap[index] = row[17]
             except:
                 pass
+            
 def main():
     print("Note: Please exempt all file extensions when entering file names.")
     print("Name of .csv file to read from:")
