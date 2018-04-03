@@ -4,6 +4,7 @@ import MapView from 'react-native-maps';
 import { Animated, AppRegistry, TextInput, Button, Alert, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,} from 'react-native';
 import Polyline from '@mapbox/polyline';
 
+//MASON AVE, DEVONSHIRE ST, BURBANK BLVD, VINELAND AVE
 class FadeInView extends React.Component {
   state = {
     fadeAnim: new Animated.Value(20),
@@ -49,7 +50,19 @@ class FadeInView extends React.Component {
             </TouchableHighlight>
             <View style = {{top: 0}}>
             <Text style = {{color : "white"}}>
-              {this.state.text}
+              1. Devonshire St, Mason Ave
+            </Text>
+            <Text style = {{color : "white", marginTop: 10}}>
+              2. Devonshire St, Arleta Ave
+            </Text>
+            <Text style = {{color : "white", marginTop: 10}}>
+              3. Whitsett ave, Arleta Ave
+            </Text>
+            <Text style = {{color : "white", marginTop: 10}}>
+              4. Whitsett ave, Burbank Blvd
+            </Text>
+            <Text style = {{color : "white", marginTop: 10}}>
+              5. Burbank Blvd, Vineland Ave
             </Text>
           </View>
           </View>
@@ -79,7 +92,10 @@ export default class Map extends Component {
     this.setState({destination: text})
   }
 
-  get12(d1a, d1b, d2b, d2a){
+  get12(d1a, d1b, d2b, d2a, r){
+    if(r <= 90){
+      alert("There is a high risk intersection in your path. Be aware when driving through the marked intersection. ");
+    }
     let theURL = "https://safe-arrivals.appspot.com/?p1a="+d1a+"&p1b="+ d1b + "&p2b="+d2b+"&p2a="+d2a
     //let theURL = "https://safe-arrivals.appspot.com/?p1a=SUNNY%20BRAE%20AVE&p1b=LANARK%20ST&p2b=SANTA%20MONICA%20BLVD&p2a=MORENO%20DR"
     fetch(theURL, {
@@ -94,7 +110,7 @@ export default class Map extends Component {
           for (i = 0; i < d.length; i++){
             if(i == 0 || i == d.length-1){
               this.state.markers.push({
-                uniqueId : i,
+                  uniqueId : i,
                   latitude: parseFloat(d[i].lat),
                   longitude: parseFloat(d[i].lon)
               })
@@ -112,7 +128,7 @@ export default class Map extends Component {
          console.error(error);
       });
   
-  let theRisk = 55;
+  let theRisk = r;
     fetch("https://safe-arrivals.appspot.com/collisions", {
          method: 'GET'
       })
@@ -139,34 +155,16 @@ export default class Map extends Component {
          console.error(error);
       });
   }
-
-  async getDirections(startLoc, destinationLoc) {
-        try {
-            let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }`)
-            let respJson = await resp.json();
-            let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
-            let coords = points.map((point, index) => {
-                return  {
-                    latitude : point[0],
-                    longitude : point[1]
-                }
-            })
-            this.state.polylines.push(coords);
-            return coords
-        } catch(error) {
-            alert(error)
-            return error
-        }
-    }
-
   move = (loc, dest) => {
     this.setState({coords : []})
+    this.setState({markers: []})
     if (loc != "" && dest != ""){
       var a = loc.split(", ")[0].replace(/ /g,"%20");
       var b = loc.split(", ")[1].replace(/ /g,"%20");
       var c = dest.split(", ")[0].replace(/ /g,"%20");
       var d = dest.split(", ")[1].replace(/ /g,"%20");
-      this.get12(a,b,c,d) 
+      var r =dest.split(", ")[2];
+      this.get12(a,b,c,d, r) 
     } else {
       alert("Incorrect Destination")
     }
@@ -183,8 +181,8 @@ export default class Map extends Component {
           initialRegion={{
             latitude:34.040203,
             longitude:-118.284030,
-            latitudeDelta: 0.0922,
-            longitudeDelta:0.1
+            latitudeDelta: 1,
+            longitudeDelta:1
           }}
         >
           {markers.map(marker => (
@@ -206,7 +204,7 @@ export default class Map extends Component {
                 longitude: marker.longitude
               }}
 
-              image={require('./uglyboi.png')}
+              image={require('./skull.png')}
             >
             </MapView.Marker>
           ))}
