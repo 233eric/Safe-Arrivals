@@ -34,8 +34,8 @@ def parseData(toRead: ".csv file to read", toWrite: ".txt file to write to"):
                         print((latlong[0] + "," + latlong[1] + "," + str(collisionCount[element]) +"\n"))
 
                         separatedStreets = element.split(",")
-                        st1 = removeExcessSpace(separatedStreets[0])
-                        st2 = removeExcessSpace(separatedStreets[1])
+                        st1 = changeStType(removeExcessSpace(separatedStreets[0]))
+                        st2 = changeStType(removeExcessSpace(separatedStreets[1]))
                         
                         newTxt.write(str(latlong[0]) + "," + str(latlong[1]) + "," + str(collisionCount[element]) + "," + st1 + ","+ st2 +"\n")
                 newTxt.close()
@@ -69,7 +69,20 @@ def removeExcessSpace(street):
                 newStr.append(" ")
     return "".join(newStr)
 
-    
+def changeStType(street):
+    tmp = street.split()
+    newStr = []
+    for i in range(len(tmp)):
+        if tmp[i] == "BL":
+            tmp.append("BLVD ")
+        elif tmp[i] == "AV":
+            tmp.append("AVE ")
+        elif tmp[i] == "WY":
+            tmp.append("WAY ")
+        else:
+            tmp.append(tmp[i] +" ")
+    return "".join(tmp[:len(tmp)-1])
+
 main()
 
 """
