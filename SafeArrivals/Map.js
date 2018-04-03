@@ -8,6 +8,7 @@ class FadeInView extends React.Component {
   state = {
     fadeAnim: new Animated.Value(20),
     expanded: true,
+    text:"No"
   }
   toggle(){
       let initialValue    = this.state.expanded? 20 : 500,
@@ -46,6 +47,11 @@ class FadeInView extends React.Component {
                 <Text style={styles.buttonText}>DIRECTIONS</Text>
               </View>
             </TouchableHighlight>
+            <View style = {{top: 0}}>
+            <Text style = {{color : "white"}}>
+              {this.state.text}
+            </Text>
+          </View>
           </View>
         {this.props.children}
       </Animated.View>
@@ -59,7 +65,8 @@ export default class Map extends Component {
     destination: '',
     markers: [],
     coords: [],
-    polylines: [],
+    circles: [],
+    text: "No Directions",
   }
   componentWillMount() {
     this.index = 0;
@@ -73,7 +80,7 @@ export default class Map extends Component {
   }
 
   get12(d1a, d1b, d2b, d2a){
-    let theURL = "https://safe-arrivals.appspot.com/?p1a="+d1a.toUpperCase()+"&p1b="+ d1b.toUpperCase() + "&p2b="+d2b.toUpperCase+"&p2a="+d2a.toUpperCase
+    let theURL = "https://safe-arrivals.appspot.com/?p1a="+d1a+"&p1b="+ d1b + "&p2b="+d2b+"&p2a="+d2a
     //let theURL = "https://safe-arrivals.appspot.com/?p1a=SUNNY%20BRAE%20AVE&p1b=LANARK%20ST&p2b=SANTA%20MONICA%20BLVD&p2a=MORENO%20DR"
     fetch(theURL, {
          method: 'GET'
@@ -97,7 +104,6 @@ export default class Map extends Component {
               "longitude": d[i].lon
             });
           }
-         console.log(responseJson)
          this.setState({
             coords: latlons
          })
@@ -105,7 +111,33 @@ export default class Map extends Component {
       .catch((error) => {
          console.error(error);
       });
+  
+  let theRisk = 3;
+    fetch("https://safe-arrivals.appspot.com/collisions", {
+         method: 'GET'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+         let latlons2 = [];
+         let d = responseJson;
+          for (i = 0; i < d.length; i++){
+            if (d[i].risk == theRisk){
+              latlons2.push({
+                uniqueId : 0,
+                latitude: parseFloat(d[i].lat),
+                longitude: parseFloat(d[i].lon),
+              });
+            }
+          }
+         this.setState({
+            circles: latlons2
+         })
+      })
+      .catch((error) => {
+         console.error(error);
+      });
   }
+
   async getDirections(startLoc, destinationLoc) {
         try {
             let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }`)
@@ -126,12 +158,15 @@ export default class Map extends Component {
     }
 
   move = (loc, dest) => {
+    this.setState({coords : []})
     if (loc != "" && dest != ""){
       var a = loc.split(", ")[0].replace(/ /g,"%20");
       var b = loc.split(", ")[1].replace(/ /g,"%20");
       var c = dest.split(", ")[0].replace(/ /g,"%20");
       var d = dest.split(", ")[1].replace(/ /g,"%20");
       this.get12(a,b,c,d) 
+    } else {
+      alert("Incorrect Destination")
     }
     this.forceUpdate();
   }
@@ -139,6 +174,7 @@ export default class Map extends Component {
     var markers = this.state.markers || [];
     var coordinates = this.state.coords || [];
     var polylines = this.state.polylines || [];
+    var circles = this.state.circles || [];
     return (
       <View style={styles.container}>
         <MapView style={styles.map}
@@ -159,9 +195,21 @@ export default class Map extends Component {
             >
             </MapView.Marker>
           ))}
+
+          {circles.map(marker => (
+            <MapView.Marker
+              key={marker.uniqueId}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude
+              }}
+              image={require('./uglyboi.png')}
+            >
+            </MapView.Marker>
+          ))}
           <MapView.Polyline 
             coordinates={coordinates}
-            strokeWidth={2}
+            strokeWidth={5}
             strokeColor="blue"/>
         </MapView>
         <View style = {styles.nav}>
