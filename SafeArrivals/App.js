@@ -23,9 +23,12 @@ class HomeScreen extends React.Component {
     return (
       <View style={{flex: 1}}>
         <View style={{flex: 1, backgroundColor: "#707070"}}>
-          <Text style={styles.title}>SafeArrivals</Text>
           <Image
-          style={{width: 300, height: 300, alignSelf: 'center', marginTop: 90}}
+          style={{width: 350, height: 100, alignSelf: 'center', marginTop: 70}}
+          source={require('./safe.png')}
+          />
+          <Image
+          style={{width: 300, height: 300, alignSelf: 'center', marginTop: 30}}
           source={require('./logo.png')}
           />
           <Button color="#000000" title="Click Here To Begin" onPress={this._signInAsync} />
