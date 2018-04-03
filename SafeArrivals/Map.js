@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView from 'react-native-maps';
 import { Animated, AppRegistry, TextInput, Button, Alert, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,} from 'react-native';
-
+import Polyline from '@mapbox/polyline';
 
 class FadeInView extends React.Component {
   state = {
@@ -53,10 +53,13 @@ class FadeInView extends React.Component {
   }
 }
 export default class Map extends Component {
+
   state = {
     location: '',
     destination: '',
-    markers: []
+    markers: [],
+    coords: [],
+    polylines: [],
   }
   componentWillMount() {
     this.index = 0;
@@ -68,24 +71,76 @@ export default class Map extends Component {
   handleDestination = (text) => {
     this.setState({destination: text})
   }
+
+  get12(d1a, d1b, d2b, d2a){
+    let theURL = "https://safe-arrivals.appspot.com/?p1a="+d1a.toUpperCase()+"&p1b="+ d1b.toUpperCase() + "&p2b="+d2b.toUpperCase+"&p2a="+d2a.toUpperCase
+    //let theURL = "https://safe-arrivals.appspot.com/?p1a=SUNNY%20BRAE%20AVE&p1b=LANARK%20ST&p2b=SANTA%20MONICA%20BLVD&p2a=MORENO%20DR"
+    fetch(theURL, {
+         method: 'GET'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        var a = responseJson.path[0].lat;
+         //alert(a);
+         let latlons = [];
+         let d = responseJson.path;
+          for (i = 0; i < d.length; i++){
+            if(i == 0 || i == d.length-1){
+              this.state.markers.push({
+                uniqueId : 0,
+                  latitude: parseFloat(d[i].lat),
+                  longitude: parseFloat(d[i].lon)
+              })
+            }
+            latlons.push({
+              "latitude": d[i].lat,
+              "longitude": d[i].lon
+            });
+          }
+         console.log(responseJson)
+         this.setState({
+            coords: latlons
+         })
+      })
+      .catch((error) => {
+         console.error(error);
+      });
+  }
+  async getDirections(startLoc, destinationLoc) {
+        try {
+            let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }`)
+            let respJson = await resp.json();
+            let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+            let coords = points.map((point, index) => {
+                return  {
+                    latitude : point[0],
+                    longitude : point[1]
+                }
+            })
+            this.state.polylines.push(coords);
+            return coords
+        } catch(error) {
+            alert(error)
+            return error
+        }
+    }
+
   move = (loc, dest) => {
-    alert(loc + dest)
-    this.state.markers.push (
-      {
-        uniqueId: 0,
-        latitude: 34.0430,
-        longitude: -118.2673
-      } 
-    );
+    if (loc != "" && dest != ""){
+      var a = loc.split(", ")[0].replace(/ /g,"%20");
+      var b = loc.split(", ")[1].replace(/ /g,"%20");
+      var c = dest.split(", ")[0].replace(/ /g,"%20");
+      var d = dest.split(", ")[1].replace(/ /g,"%20");
+      this.get12(a,b,c,d) 
+    }
     this.forceUpdate();
   }
-
   render() {
     var markers = this.state.markers || [];
+    var coordinates = this.state.coords || [];
+    var polylines = this.state.polylines || [];
     return (
-
       <View style={styles.container}>
-        
         <MapView style={styles.map}
           initialRegion={{
             latitude:34.040203,
@@ -104,6 +159,10 @@ export default class Map extends Component {
             >
             </MapView.Marker>
           ))}
+          <MapView.Polyline 
+            coordinates={coordinates}
+            strokeWidth={2}
+            strokeColor="blue"/>
         </MapView>
         <View style = {styles.nav}>
           <View style = {{flexDirection: 'row'}}>
