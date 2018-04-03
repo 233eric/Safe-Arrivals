@@ -27,23 +27,25 @@ def parseData(toRead: ".csv file to read", toWrite: ".txt file to write to"):
                     pass
                 for element in collisionCount:
                     if collisionCount[element] > 50:
-                        #risk = collisionCount[element]//50
                         
                         ## converts str: "(lat, long)" into an iterable list type
                         latlong = addressMap[element][1:len(addressMap[element])-1].split(", ")
                         
-                        print((latlong[0] + " " + latlong[1] + " " + str(collisionCount[element]) +"\n"))
+                        print((latlong[0] + "," + latlong[1] + "," + str(collisionCount[element]) +"\n"))
+
+                        separatedStreets = element.split(",")
+                        st1 = removeExcessSpace(separatedStreets[0])
+                        st2 = removeExcessSpace(separatedStreets[1])
                         
-                        #print(addressMap[element] + " | " + str(collisionCount[element]))
-                        
-                        newTxt.write(str(latlong[0]) + " " + str(latlong[1]) + " " + str(collisionCount[element]) +"\n")
+                        newTxt.write(str(latlong[0]) + "," + str(latlong[1]) + "," + str(collisionCount[element]) + "," + st1 + ","+ st2 +"\n")
                 newTxt.close()
                 return
 
             try:
-                #print(row[15].split()[0]+"\n"+ row[16].split()[0] +"\n"+ row[17]+"\n""\n")
-                index = row[15] + row[16]
-                #collisionCount[row[15].split()[0]+" "+row[16].split()[0]] = collisionCount.get(row[15]+row[16], 0) + 1
+                
+                index = row[15] +","+ row[16]
+                if i == 100000: print(index)
+                
                 collisionCount[index] = collisionCount.get(index, 0) + 1
                 if index not in addressMap:
                     addressMap[index] = row[17]
@@ -56,6 +58,17 @@ def main():
     print("Name of .txt file to write to:")
     toWrite = input()
     parseData(toRead, toWrite)
+
+def removeExcessSpace(street):
+    tmp = street.split(" ")
+    newStr = []
+    for i in range(len(tmp)):
+        if tmp[i] != "":
+            newStr.append(tmp[i])
+            if i < len(tmp)-1:
+                newStr.append(" ")
+    return "".join(newStr)
+
     
 main()
 
