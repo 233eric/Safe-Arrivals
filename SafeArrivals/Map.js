@@ -4,13 +4,18 @@ import MapView from 'react-native-maps';
 import { Animated, AppRegistry, TextInput, Button, Alert, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,} from 'react-native';
 import Polyline from '@mapbox/polyline';
 
-//MASON AVE, DEVONSHIRE ST, BURBANK BLVD, VINELAND AVE
+// Creates the view that makes the directions menu. 
+// Menu will open or close depending on the state.
 class FadeInView extends React.Component {
+
+  // the state of the menu, if expanded, the menu knows to shrink
+  // on the next button press.
   state = {
     fadeAnim: new Animated.Value(20),
     expanded: true,
     text:"No"
   }
+  //changes the values based on whether or not the view is expanded.
   toggle(){
       let initialValue    = this.state.expanded? 20 : 500,
           finalValue      = this.state.expanded? 500 : 20;
@@ -43,6 +48,8 @@ class FadeInView extends React.Component {
         }}
       >
         <View style = {styles.menu}>
+
+            // The button that controls whether or not the view expands or not.
             <TouchableHighlight onPress={this.toggle.bind(this)} underlayColor="white">
               <View style={styles.button}>
                 <Text style={styles.buttonText}>DIRECTIONS</Text>
@@ -71,27 +78,34 @@ class FadeInView extends React.Component {
     );
   }
 }
+
+// The base map class, creates the view that will have the map implementation.
 export default class Map extends Component {
 
   state = {
-    location: '',
-    destination: '',
-    markers: [],
-    coords: [],
-    circles: [],
+    location: '', //initial start location for pathfinding
+    destination: '', // destination for travel
+    markers: [], // markers that are dropped on the map
+    coords: [],  // points along the path
+    circles: [],  // danger zones
     text: "No Directions",
   }
   componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }
+
+  // saves the text in the field every time it changes
   handleLocation = (text) => {
     this.setState({location: text})
   }
+
+  // saves the text in the field every time it changes
   handleDestination = (text) => {
     this.setState({destination: text})
   }
 
+  // Gets the path to the destination from localhost server and returns array of points.
   get12(d1a, d1b, d2b, d2a, r){
     if(r <= 90){
       alert("There is a high risk intersection in your path. Be aware when driving through the marked intersection. ");
@@ -128,6 +142,7 @@ export default class Map extends Component {
          console.error(error);
       });
   
+  // Populates the array with markers based on the risk of each intersection.
   let theRisk = r;
     fetch("https://safe-arrivals.appspot.com/collisions", {
          method: 'GET'
@@ -155,6 +170,8 @@ export default class Map extends Component {
          console.error(error);
       });
   }
+
+  //takes the location and destination and calls the point getting function.
   move = (loc, dest) => {
     this.setState({coords : []})
     this.setState({markers: []})
@@ -177,6 +194,8 @@ export default class Map extends Component {
     var circles = this.state.circles || [];
     return (
       <View style={styles.container}>
+
+      // initializes the mapview container, and the google maps view.
         <MapView style={styles.map}
           initialRegion={{
             latitude:34.040203,
@@ -185,6 +204,7 @@ export default class Map extends Component {
             longitudeDelta:1
           }}
         >
+          //each time the view is refreshed, places each marker in the state array.
           {markers.map(marker => (
             <MapView.Marker
               key={marker.uniqueId}
@@ -204,7 +224,7 @@ export default class Map extends Component {
                 longitude: marker.longitude
               }}
 
-              image={require('./skull.png')}
+              image={require('./danger.png')}
             >
             </MapView.Marker>
           ))}
@@ -245,6 +265,8 @@ export default class Map extends Component {
     );
   }
 }
+
+//stylesheet for the application.
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
