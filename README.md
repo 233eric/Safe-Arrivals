@@ -7,3 +7,19 @@
 - [x] Add markers to areas that exceed collision threshold
 - [x] Navigation/Rerouting
 - [x] Host app on cloud server.
+
+## Project
+
+Normal Routing:
+
+![Screenshot](route.png)
+
+Directions:
+![Screenshot](directions.png)
+
+Alert if there are high amounts of collisions:
+![Screenshot](alert.png)
+
+Routing with high collision areas:
+
+![Screenshot](risk.png)

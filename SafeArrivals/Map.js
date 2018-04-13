@@ -41,7 +41,7 @@ class FadeInView extends React.Component {
     let { fadeAnim } = this.state;
     
     return (
-      <Animated.View                 // Special animatable View
+      <Animated.View             
         style={{
           ...this.props.style,
           height: fadeAnim,        
@@ -49,7 +49,6 @@ class FadeInView extends React.Component {
       >
         <View style = {styles.menu}>
 
-            // The button that controls whether or not the view expands or not.
             <TouchableHighlight onPress={this.toggle.bind(this)} underlayColor="white">
               <View style={styles.button}>
                 <Text style={styles.buttonText}>DIRECTIONS</Text>
@@ -195,7 +194,6 @@ export default class Map extends Component {
     return (
       <View style={styles.container}>
 
-      // initializes the mapview container, and the google maps view.
         <MapView style={styles.map}
           initialRegion={{
             latitude:34.040203,
@@ -204,7 +202,7 @@ export default class Map extends Component {
             longitudeDelta:1
           }}
         >
-          //each time the view is refreshed, places each marker in the state array.
+          
           {markers.map(marker => (
             <MapView.Marker
               key={marker.uniqueId}
