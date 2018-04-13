@@ -15,7 +15,7 @@ Normal Routing:
 ![Screenshot](route.png)
 
 Directions:
-![Screenshot](directions.png)
+![Screenshot](direction.png)
 
 Alert if there are high amounts of collisions:
 ![Screenshot](alert.png)
